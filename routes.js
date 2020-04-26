@@ -12,7 +12,7 @@ module.exports = [
     },
     {
         method: 'GET',
-        path: '/{param*}',
+        path: '/assets/{param*}',
         handler: {
             directory: {
                 path: '.', // directorio public
@@ -33,8 +33,10 @@ module.exports = [
                     name: Joi.string().required().min(3),
                     email: Joi.string().required().email(),
                     password: Joi.string().required().min(6),
-                }
-            }
+                },
+                // si falla el payload
+                failAction: user.failValidation
+            },
         },
         path: '/create-user',
         handler: user.createUser
@@ -45,16 +47,28 @@ module.exports = [
         handler: site.login
     },
     {
+        method: 'GET',
+        path: '/logout',
+        handler: user.logout
+    },
+    {
         method: 'POST',
         options: {
             validate: {
                 payload: {
                     email: Joi.string().required().email(),
                     password: Joi.string().required().min(6),
-                }
+                },
+                // si falla el payload
+                failAction: user.failValidation
             }
         },
         path: '/validate-user',
         handler: user.validateUser
+    },
+    {
+        method: ['GET', 'POST'],
+        path: '/{any*}',
+        handler: site.notFound
     },
 ]

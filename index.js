@@ -127,9 +127,16 @@ const init = async () => {
     console.log('Server running on %s', server.info.uri);
 };
 
+// esto es para capturar todos los errores que se puedan generar
+// una promesa que no se cumplio
 process.on('unhandledRejection', (err) => {
+    console.log('unhandledRejection', err);
+    process.exit(1);
+});
 
-    console.log(err);
+// este es para manejar cualquier error
+process.on('unhandledException', (err) => {
+    console.log('unhandledException', err);
     process.exit(1);
 });
 
