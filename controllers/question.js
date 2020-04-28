@@ -1,12 +1,12 @@
 'use strict'
-const questions = require('../models/index')
+const Questions = require('../models/index').Questions
 
 const createQuestion = async (req, h) => {
+
     let result
 
     try {
-        result = await questions.create(req.payload, req.state)
-        console.log(`Pregunta creada con el ID ${result}`);
+        result = await Questions.create(req.payload, req.state)
     } catch (error) {
         console.error('Ocurrio un error: ', error);
         return h.view('ask',{

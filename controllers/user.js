@@ -66,7 +66,8 @@ const logout = (request, h) => {
 const failValidation = (request, h, err) => {
     const templates = {
         '/create-user': 'register',
-        '/validate-user': 'login' 
+        '/validate-user': 'login',
+        '/create-question': 'ask'
     }
 
     // takeover es para saltarse la validacion del ciclo de vida

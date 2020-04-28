@@ -15,5 +15,5 @@ const Questions = require('./questions')
 
 module.exports = {
     Users: new Users(db),
-    questions: new Questions(db)
+    Questions: new Questions(db)
 }

@@ -48,11 +48,23 @@ const fileNotFound = (request, h) => {
     return h.continue
 }
 
+const ask = (request, h) => {
+    if( !request.state.user ) {
+        return h.redirect('/login')
+    }
+
+    return h.view('ask', {
+        title: 'Crear pregunta',
+        user: request.state.user
+    })
+}
+
 
 module.exports = {
     register,
     home,
     login,
     notFound,
-    fileNotFound
+    fileNotFound,
+    ask
 }
