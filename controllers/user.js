@@ -64,7 +64,18 @@ const logout = (request, h) => {
 }
 
 const failValidation = (request, h, err) => {
-    return Boom.badRequest('Falló la validacion', request.payload)
+    const templates = {
+        '/create-user': 'register',
+        '/validate-user': 'login' 
+    }
+
+    // takeover es para saltarse la validacion del ciclo de vida
+
+    return h.view(templates[request.path], {
+        title: 'Error de validacion',
+        error: 'Por favor complete los campos requeridos'
+    }).code(400).takeover()
+    // return Boom.badRequest('Falló la validacion', request.payload)
 }
 
 module.exports = {

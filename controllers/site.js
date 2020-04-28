@@ -38,10 +38,21 @@ const notFound = (request, h) => {
     return h.view('404', {}, {layout: 'error-layout'} ).code(404)
 }
 
+const fileNotFound = (request, h) => {
+    const response = request.response
+    if( response.isBoom && response.output.statusCode ===  404) {
+        return h.view('404', {}, {layout: 'error-layout'} ).code(404)
+    }
+
+    // esto es para que continue con el ciclo de vida sino consiguio el 404
+    return h.continue
+}
+
 
 module.exports = {
     register,
     home,
     login,
-    notFound
+    notFound,
+    fileNotFound
 }

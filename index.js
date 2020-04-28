@@ -7,6 +7,7 @@ const Vision = require('@hapi/vision');
 const Handlebars = require('handlebars')
 const Joi = require('@hapi/joi')
 const routes = require('./routes')
+const site = require('./controllers/site')
 
 const init = async () => {
 
@@ -43,6 +44,10 @@ const init = async () => {
         layout: true, // todo se redireccionara dentro de la variable content
         layoutPath: 'views'
     })
+
+    // esto es para escuchar el ciclo de vida 
+    // aqui usare el antes de servir la respuesta al usuario
+    server.ext('onPreResponse', site.fileNotFound)
 
     /** Rutas importadas */
     server.route(routes)
