@@ -1,4 +1,5 @@
 'use strict'
+const questions = require('../models/index').Questions
 
 const register = (request, h) => {
 
@@ -13,11 +14,21 @@ const register = (request, h) => {
     })
 }
 
-const home = (request, h) => {
+const home = async (request, h) => {
+
+    let data 
+
+    try {
+        data = await questions.getLast(10)
+    } catch (error) {
+        console.error(error);
+    }
+
     return h.view('index', {
         title: 'Home',
         // esta informacion la tomo del cookies que cree en user controller
-        user: request.state.user
+        user: request.state.user,
+        questions: data
     })
 }
 
