@@ -3,6 +3,10 @@ const Questions = require('../models/index').Questions
 
 const createQuestion = async (req, h) => {
 
+    if(!req.state.user) {
+        return h.redirect('/login')
+    }
+
     let result
 
     try {
@@ -19,6 +23,11 @@ const createQuestion = async (req, h) => {
 }
 
 const answerQuestion = async (req, h) => {
+
+    if(!req.state.user) {
+        return h.redirect('/login')
+    }
+
     let result
     try {
         result = await Questions.answer(req.payload, req.state.user)
@@ -31,7 +40,32 @@ const answerQuestion = async (req, h) => {
     return h.redirect(`/question/${req.payload.id}`)
 }
 
+const setAnswerRight = async (req, h) => {
+    
+    if(!req.state.user) {
+        return h.redirect('/login')
+    }
+
+    let result 
+    
+    try {
+        
+        result = await req
+        .server
+        .methods
+        .setAnswerRight(req.params.questionId, req.params.answerId, req.state.user)
+
+        console.log(result);
+
+    } catch (error) {
+        console.error(error);
+    }
+
+    return h.redirect(`/question/${req.params.questionId}`)
+}
+
 module.exports = {
     createQuestion,
-    answerQuestion
+    answerQuestion,
+    setAnswerRight
 }

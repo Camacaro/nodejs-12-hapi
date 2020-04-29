@@ -9,6 +9,7 @@ const Handlebars = require('./lib/helpers')
 const Joi = require('@hapi/joi')
 const routes = require('./routes')
 const site = require('./controllers/site')
+const methods = require('./lib/methods')
 
 // ahora esto esta en lib
 // helpers, para que me retorne el numer de respuesta
@@ -32,6 +33,10 @@ const init = async () => {
     await server.register(inert);
     await server.register(Vision);
     await server.validator(Joi),
+
+    // funcion que estara disponible en cualquier ruta por medio del request
+    // para no tener que estar importando en todos los controladores a usar
+    server.method('setAnswerRight', methods.setAnswerRight)
 
     /**
      * Especificar cookies para mantener login
