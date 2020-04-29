@@ -87,10 +87,14 @@ module.exports = [
     {
         method: 'POST',
         options: {
+            payload: {
+                multipart: true
+            },
             validate: {
                 payload: {
                     title: Joi.string().required(),
                     description: Joi.string().required(),
+                    image: Joi.any().optional()
                 },
                 // si falla el payload
                 failAction: user.failValidation

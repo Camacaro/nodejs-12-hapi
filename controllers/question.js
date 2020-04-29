@@ -1,5 +1,12 @@
 'use strict'
+const { writeFile } = require('fs')
+const { promisify } = require('util')
+const { join } = require('path')
+const { v1: uuidv1 } = require('uuid');
 const Questions = require('../models/index').Questions
+
+// esto es para colocar la promesa y usar async y await
+const write = promisify(writeFile)
 
 const createQuestion = async (req, h) => {
 
@@ -7,10 +14,16 @@ const createQuestion = async (req, h) => {
         return h.redirect('/login')
     }
 
-    let result
+    let result, filename
 
     try {
-        result = await Questions.create(req.payload, req.state)
+
+        if( Buffer.isBuffer(req.payload.image) ) {
+            filename = `${ uuidv1() }.png`
+            await write( join(__dirname, '..', 'public', 'uploads', filename), req.payload.image )
+        }
+
+        result = await Questions.create(req.payload, req.state, filename)
     } catch (error) {
         console.error('Ocurrio un error: ', error);
         return h.view('ask',{
@@ -19,7 +32,8 @@ const createQuestion = async (req, h) => {
         } ).code(500).takeover()
     }
 
-    return h.response(`Pregunta creada con el ID ${result}`)
+    // return h.response(`Pregunta creada con el ID ${result}`)
+    return h.redirect(`/question/${result}`)
 }
 
 const answerQuestion = async (req, h) => {
