@@ -10,6 +10,7 @@ const Joi = require('@hapi/joi')
 const routes = require('./routes')
 const site = require('./controllers/site')
 const methods = require('./lib/methods')
+const Good = require('@hapi/good')
 
 // ahora esto esta en lib
 // helpers, para que me retorne el numer de respuesta
@@ -32,6 +33,23 @@ const init = async () => {
 
     await server.register(inert);
     await server.register(Vision);
+    // esto es para registrar logs en el servidor
+    await server.register({
+        plugin: Good,
+        options: {
+            ops: {
+            interval: 2000,
+            },
+            reporters: {
+                myConsoleReporters: [
+                    {
+                        module: require('@hapi/good-console'),
+                    },
+                    'stdout',
+                ],
+            },
+        },
+    });
     await server.validator(Joi),
 
     // funcion que estara disponible en cualquier ruta por medio del request
@@ -151,19 +169,22 @@ const init = async () => {
     // });
 
     await server.start();
-    console.log('Server running on %s', server.info.uri);
+    // console.log('Server running on %s', server.info.uri);
+    server.log('info', `Server running on ${server.info.uri}`)
 };
 
 // esto es para capturar todos los errores que se puedan generar
 // una promesa que no se cumplio
 process.on('unhandledRejection', (err) => {
-    console.log('unhandledRejection', err);
+    // console.log('unhandledRejection', err);
+    server.log('unhandledRejection', err)
     process.exit(1);
 });
 
 // este es para manejar cualquier error
 process.on('unhandledException', (err) => {
-    console.log('unhandledException', err);
+    // console.log('unhandledException', err);
+    server.log('unhandledException', err)
     process.exit(1);
 });
 
