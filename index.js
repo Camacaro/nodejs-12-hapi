@@ -37,6 +37,15 @@ const init = async () => {
     // funcion que estara disponible en cualquier ruta por medio del request
     // para no tener que estar importando en todos los controladores a usar
     server.method('setAnswerRight', methods.setAnswerRight)
+    // cachear el resultado de la respuesta de la funcion
+    server.method('getLast', methods.getLast, {
+        cache: {
+            expiresIn: 1000 * 60, // un minuto
+            // esta propiedad es para que despues de este timpo si falla
+            // la funcion genere un error
+            generateTimeout: 2000
+        }
+    })
 
     /**
      * Especificar cookies para mantener login

@@ -16,13 +16,16 @@ const register = (request, h) => {
 
 const home = async (request, h) => {
 
-    let data 
+    // let data 
 
-    try {
-        data = await questions.getLast(10)
-    } catch (error) {
-        console.error(error);
-    }
+    // try {
+    //     data = await questions.getLast(10)
+    // } catch (error) {
+    //     console.error(error);
+    // }
+
+    // ahora tomamos esa funcion desde el servidor
+    const data = await request.server.methods.getLast(10)
 
     return h.view('index', {
         title: 'Home',

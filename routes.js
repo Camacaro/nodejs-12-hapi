@@ -9,7 +9,14 @@ module.exports = [
     {
         method: 'GET',
         path: '/',
-        handler: site.home
+        handler: site.home,
+        options: {
+            // config en cache del browser 
+            cache: {
+                expiresIn: 1000 * 30, // el tiempo de duracion del cache, esto se mide en milisegundos le ponemos 30 segundos
+                privacy: 'private',
+            }
+        }
     },
     {
         method: 'GET',
