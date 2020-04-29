@@ -70,6 +70,25 @@ const ask = (request, h) => {
     })
 }
 
+const viewQuestion = async (req, h) => {
+    let data
+    try {
+        data = await questions.getOne(req.params.id)
+        if(!data){
+            return notFound(req, h)
+        }
+    } catch (error) {
+        console.error(error)
+    }
+
+    return h.view('question', {
+        title: 'Detalles de la pregunta',
+        user: req.state.user,
+        question: data,
+        key: req.params.id
+    })
+}
+
 
 module.exports = {
     register,
@@ -77,5 +96,6 @@ module.exports = {
     login,
     notFound,
     fileNotFound,
-    ask
+    ask,
+    viewQuestion
 }
