@@ -9,6 +9,12 @@ const Joi = require('@hapi/joi')
 const routes = require('./routes')
 const site = require('./controllers/site')
 
+// helpers, para que me retorne el numer de respuesta
+Handlebars.registerHelper('answerNumber', (answers) => {
+    const keys = Object.keys(answers)
+    return keys.length
+})
+
 const init = async () => {
 
     const server = Hapi.server({
