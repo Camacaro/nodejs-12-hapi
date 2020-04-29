@@ -4,16 +4,18 @@ const Hapi = require('@hapi/hapi');
 const inert  = require('@hapi/inert')
 const Path = require('path')
 const Vision = require('@hapi/vision');
-const Handlebars = require('handlebars')
+// const Handlebars = require('handlebars')
+const Handlebars = require('./lib/helpers')
 const Joi = require('@hapi/joi')
 const routes = require('./routes')
 const site = require('./controllers/site')
 
+// ahora esto esta en lib
 // helpers, para que me retorne el numer de respuesta
-Handlebars.registerHelper('answerNumber', (answers) => {
-    const keys = Object.keys(answers)
-    return keys.length
-})
+// Handlebars.registerHelper('answerNumber', (answers) => {
+//     const keys = Object.keys(answers)
+//     return keys.length
+// })
 
 const init = async () => {
 
