@@ -12,6 +12,8 @@ const site = require('./controllers/site')
 const methods = require('./lib/methods')
 const Good = require('@hapi/good')
 const Crumb = require('@hapi/crumb')
+const Blankie = require('blankie')
+const Scooter = require('@hapi/scooter')
 
 // ahora esto esta en lib
 // helpers, para que me retorne el numer de respuesta
@@ -71,6 +73,18 @@ const init = async () => {
             }
         }
     })
+
+    // policy para el XSS
+    await server.register([Scooter, {
+        plugin: Blankie,
+        options: {
+            defaultSrc: `'self' 'unsafe-inline'`,
+            styleSrc: ` 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com `,
+            fontSrc: `'self' 'unsafe-inline' data:`,
+            scriptSrc: ` 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com/ https://code.jquery.com/ `,
+            generateNonces: false
+        }
+    }])
    
 
     // funcion que estara disponible en cualquier ruta por medio del request
