@@ -11,6 +11,7 @@ const routes = require('./routes')
 const site = require('./controllers/site')
 const methods = require('./lib/methods')
 const Good = require('@hapi/good')
+const Crumb = require('@hapi/crumb')
 
 // ahora esto esta en lib
 // helpers, para que me retorne el numer de respuesta
@@ -56,6 +57,18 @@ const init = async () => {
         plugin: require('./lib/api'),
         options: {
             prefix: 'api'
+        }
+    })
+
+    // asegurar el servidor contra CSRF
+    // para que esto funcione hay que agregarle un input con el valor del token a las vistas
+    // <input type="hidden" name="crumb" value="{{crumb}}" />
+    await server.register({
+        plugin: Crumb,
+        options: {
+            cookieOptions: {
+                isSecure: process.env.NODE_ENV === 'prod'
+            }
         }
     })
    
