@@ -33,6 +33,7 @@ const init = async () => {
 
     await server.register(inert);
     await server.register(Vision);
+    await server.validator(Joi),
     // esto es para registrar logs en el servidor
     await server.register({
         plugin: Good,
@@ -50,7 +51,14 @@ const init = async () => {
             },
         },
     });
-    await server.validator(Joi),
+
+    await server.register({
+        plugin: require('./lib/api'),
+        options: {
+            prefix: 'api'
+        }
+    })
+   
 
     // funcion que estara disponible en cualquier ruta por medio del request
     // para no tener que estar importando en todos los controladores a usar
@@ -177,14 +185,14 @@ const init = async () => {
 // una promesa que no se cumplio
 process.on('unhandledRejection', (err) => {
     // console.log('unhandledRejection', err);
-    server.log('unhandledRejection', err)
+    console.log('unhandledRejection', err)
     process.exit(1);
 });
 
 // este es para manejar cualquier error
 process.on('unhandledException', (err) => {
     // console.log('unhandledException', err);
-    server.log('unhandledException', err)
+    console.log('unhandledException', err)
     process.exit(1);
 });
 
