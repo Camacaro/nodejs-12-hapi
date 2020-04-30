@@ -14,6 +14,7 @@ const Good = require('@hapi/good')
 const Crumb = require('@hapi/crumb')
 const Blankie = require('blankie')
 const Scooter = require('@hapi/scooter')
+const HapiDevErrors = require('hapi-dev-errors')
 
 // ahora esto esta en lib
 // helpers, para que me retorne el numer de respuesta
@@ -85,6 +86,13 @@ const init = async () => {
             generateNonces: false
         }
     }])
+
+    await server.register({
+        plugin: HapiDevErrors,
+        options: {
+            showErrors: process.env.NODE_ENV !== 'prod'
+        }
+    })
    
 
     // funcion que estara disponible en cualquier ruta por medio del request
